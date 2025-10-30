@@ -1,51 +1,31 @@
-# Tasks Database API
+# Tasks Database API (Flask + SQLite)
 
-Minimal Flask API server offering CRUD for tasks stored in a SQLite database.
+This service exposes a simple REST API for managing to-do tasks backed by SQLite.
 
-## Environment variables
-- SQLITE_DB: Absolute or relative path to the SQLite database file (default: ./myapp.db)
-- PORT: Port to run the API server on (default: 5001)
+## Environment Variables
 
-## Setup
-1. Create a virtual environment and install dependencies:
-   python3 -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
+Create a `.env` file in this directory (already provided) with:
 
-2. Initialize the database and create the tasks table:
-   # optionally set custom location
-   # export SQLITE_DB=/absolute/path/to/myapp.db
-   python init_db.py
+- `PORT=5001` — The port the server listens on.
+- `SQLITE_DB=./myapp.db` — SQLite database file path.
+- `CORS_ORIGINS=http://localhost:3000` — Optional. Comma-separated list of allowed origins for CORS.
 
-3. Start the API server:
-   # optionally override port
-   # export PORT=5001
-   # optionally set DB path for the server (must match where you initialized)
-   # export SQLITE_DB=/absolute/path/to/myapp.db
-   python api_server.py
+## REST Endpoints
 
-The server will be available at:
-http://localhost:${PORT:-5001}
+These endpoints are aligned with the frontend (to_do_list_frontend/src/api.js):
 
-## API Endpoints
-- GET    /api/tasks
-- POST   /api/tasks        (JSON: { "title": "Task title", "completed": false })
-- PUT    /api/tasks/:id    (JSON: { "title": "New title", "completed": true })
-- PATCH  /api/tasks/:id/toggle
-- DELETE /api/tasks/:id
+- GET    `/tasks` — List all tasks.
+- POST   `/tasks` — Create a new task. Body: `{ "title": "..." }`.
+- PUT    `/tasks/{id}` — Update a task by id. Body: `{ "title": "...", "completed": true|false }` (fields optional).
+- PATCH  `/tasks/{id}/toggle` — Toggle completion.
+- DELETE `/tasks/{id}` — Delete a task.
 
-Notes:
-- The completed field is stored as INTEGER (0/1) in SQLite but exposed as boolean in the API.
-- Timestamps are ISO strings.
+Return payloads are JSON.
 
-## Table schema
-Table: tasks
-- id INTEGER PK AUTOINCREMENT
-- title TEXT NOT NULL
-- completed INTEGER DEFAULT 0
-- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-- updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+## Running
 
-## Development tips
-- Ensure SQLITE_DB is the same between init_db.py and the running api_server.py if you set a custom path.
-- CORS is enabled for all origins for development convenience.
+- Make sure Python dependencies are installed for Flask, CORS, and SQLite usage (e.g., flask, flask-cors).
+- Ensure the server binds to the port from `PORT` and reads the database at `SQLITE_DB`.
+- CORS should be enabled for the frontend origin.
+
+Once running at `http://localhost:5001`, the React app (http://localhost:3000) will connect using `REACT_APP_API_URL`.
