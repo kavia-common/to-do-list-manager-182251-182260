@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Initialize SQLite database for tasks_database"""
+"""Initialize SQLite database for tasks_database, including the 'tasks' table."""
 
 import sqlite3
 import os
 
-DB_NAME = "myapp.db"
+# Allow overriding DB path via env var for consistency with the API server
+DB_NAME = os.environ.get("SQLITE_DB") or "myapp.db"
 DB_USER = "kaviasqlite"  # Not used for SQLite, but kept for consistency
 DB_PASSWORD = "kaviadefaultpassword"  # Not used for SQLite, but kept for consistency
 DB_PORT = "5000"  # Not used for SQLite, but kept for consistency
@@ -47,6 +48,17 @@ cursor.execute("""
         username TEXT UNIQUE NOT NULL,
         email TEXT UNIQUE NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+""")
+
+# Create the tasks table idempotently
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS tasks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        completed INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
 """)
 
