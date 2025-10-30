@@ -1,4 +1,4 @@
 # SQLite connection methods:
-# Python: sqlite3.connect('myapp.db')
+# Python: sqlite3.connect('/home/kavia/workspace/code-generation/to-do-list-manager-182251-182260/tasks_database/myapp.db')
 # Connection string: sqlite:////home/kavia/workspace/code-generation/to-do-list-manager-182251-182260/tasks_database/myapp.db
 # File path: /home/kavia/workspace/code-generation/to-do-list-manager-182251-182260/tasks_database/myapp.db
